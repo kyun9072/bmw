@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layouts/base_layout}">
+<head>
+<title th:text="#{page_name}"></title>   
+<th:block th:replace="fragments/base_config :: main_config"></th:block>   
+</head>
+ 
+<body id="thisBody">
+
+<th:block layout:fragment="content">
+
+<!-- 섹션 -->
+<div class="container">
+
+<!-- 전체를 감싸보아 -->
+<div class="row-ex" style="background-color: gray;">
+
+<!-- 왼쪽으로 갈놈 -->
+<div class="col-8" id="ch">
+     <canvas id="canvas" ></canvas>
+        <script th:src="@{/babylonjs/js/babylon.js}"></script>
+        <script th:src="@{/babylonjs/js/babylonjs.loaders.js}"></script>
+  		<script id="img" src=/babylonjs/js/test.js></script>
+</div>
+<!-- 오른쪽으로 갈놈 -->
+<div class="col">
+
+<div class="col">
+<label th:text="#{model}"></label><br>
+<select id="carSize" name="carSize" style="width: 250px;">
+<option th:text="#{model}"></option>
+<option th:each="car:${carList}" th:value="${car.carSize.carSize}+'|'+${car.price}" th:text="${car.car_model}"></option>
+</select>
+</div>
+
+<input id="model" hidden="true">
+
+<div class="col">
+<label th:text="#{option1}"></label><br>
+<select id="common" name="common" style="width: 250px; text-align: center;">
+<option th:text="#{option1}"></option>
+</select>
+</div>
+
+
+<div class="col">
+<label th:text="#{option2}"></label><br>
+<select id="add" name="add" style="width: 250px;">
+<option th:text="#{option2}"></option>
+</select>
+</div>
+
+<div class="col">
+<label th:text="#{select_card}"></label><br>
+<select id="card" name="card" style="width: 250px;">
+<option th:text="#{placeholder_card}"></option>
+<option th:each="cardlist:${card}" th:value="${cardlist.code}"  th:text="${cardlist.card}"></option>
+</select>
+</div>
+
+<div class="col">
+<label th:text="#{monthly}">개월수</label><br>
+<select id="month" name="month" style="width: 250px;">
+<option th:text="#{placeholder_monthly}"></option>
+</select>
+</div>
+
+<div class="col">
+
+<button id="estimate" type="button" class="btn btn-sm btn-dark" th:text="#{estimate}"></button>
+</div>
+<script type="text/javascript">
+function comma(num){
+    var len, point, str; 
+       
+    num = num + ""; //스트링화
+    point = num.length % 3; //길이를 3으로 나눈나머지
+    len = num.length;  //숫자의 길이
+   
+    str = num.substring(0, point); //0부터 3으로 나눈 나머지까지 짜름 
+    while (point < len) { //포인트가 숫자길이보다 작을떄까지 반복
+        if (str != "") str += ",";  //공백이 아니면 str에 , 추가
+        str += num.substring(point, point + 3);   //str에 
+        point += 3; 
+    } 
+    return str;
+}
+
+$(document).ready(function(){
+	$("#test").hide();
+	$("#estimate").click(function(){
+		$("#total text").remove();
+		$("#monthly text").remove();
+		var car = $("select[name=carSize]").val().substring($("select[name=carSize]").val().indexOf('|')+1);
+		var common=  $("select[name=common]").val();
+		var add= $("select[name=add]").val();
+		var month= $("select[name=month]").val().substring($("select[name=month]").val().indexOf('|')+1);
+		var interest= $("select[name=month]").val().substring(0,$("select[name=month]").val().indexOf('|'));
+		
+		var sCar = parseInt(car);
+		var sCommon = parseInt(common);
+		var sAdd = parseInt(add);
+		var sMonth = parseInt(month);
+		var	sInterest = parseFloat(interest);
+		
+		if(car=="차종"){
+			alert('차종을 선택하세요');
+		}else if(car!="차종"){
+				$("#total").val(comma(sCar));
+				if(month=='할부 개월수를 선택하세요'){
+					$("#test").hide();
+				}else{
+					$("#test").show();
+				}
+				if(add=="선택옵션"&&common=="공통옵션"){
+					if(month!='할부 개월수를 선택하세요'){
+						
+						$("#monthly").val(comma(Math.ceil(sCar/sMonth*(sInterest+1))))
+					}
+				}
+				else if (add!="선택옵션"&&common!="공통옵션"){
+					$("#total").val(comma(sCar+sCommon+sAdd));
+					if(month!='할부 개월수를 선택하세요'){
+						$("#monthly").val(comma(Math.ceil((sCar+sCommon+sAdd)/sMonth*(sInterest+1))));
+					}
+				}
+				else if(common=="공통옵션"&&add!="선택옵션"){
+					$("#total").val(comma(sCar+sAdd));
+					//카드 고르고 할부 선택했을 때
+					
+					if(month!='할부 개월수를 선택하세요'){
+						$("#monthly").val(comma(Math.ceil((sCar+sAdd)/sMonth*(sInterest+1))));
+					}
+				}else if (add=="선택옵션"&&common!="공통옵션"){
+					$("#total").val(comma(sCar+sCommon));
+					
+					if(month!='할부 개월수를 선택하세요'){
+						$("#monthly").val(comma(Math.ceil((sCar+sCommon)/sMonth*(sInterest+1))));
+					}
+				
+					
+			}
+		}
+	})
+})
+</script>
+<div class="col">
+<label>Total</label><br>
+<input type="text" id="total" style="text-align: right; width: 250px;" placeholder="KRW">
+</div>
+<div class="col" id="test">
+<label>Monthly payment</label><br>
+<input type="text" id="monthly" style="text-align: right; width: 250px;" placeholder="KRW">
+</div>
+<script>
+	$('#carSize').change(function(){
+		
+		$.ajax({
+			url:'/model',
+			data:{
+				carSize : $("#carSize option:selected").text()
+			},
+			success:function(data){
+				$("#model").val(data);
+				$("#ch canvas").remove(); $("#ch").append("<canvas id='canvas'></canvas>");
+				test();
+			}
+		});
+	});
+	$('#carSize').change(function(){
+		$.ajax({
+			url:'/common',
+			data:{
+				carSize : $(this).val().substring(0,$("select[name=carSize]").val().indexOf('|'))
+			},
+			dataType:'json',
+			success:function(data){
+				var str = "<option>공통옵션</option>";
+				for(var i in data){
+					str+="<option value="+data[i].price+">"+data[i].c_option+"</option>";
+					};
+						$('#common option').remove();
+						$('#common').append(str);
+			}
+		});
+	});
+	$('#carSize').change(function(){
+		$.ajax({
+			url:'/add',
+			data:{
+				carSize : $(this).val().substring(0,$("select[name=carSize]").val().indexOf('|'))
+			},
+			success:function(data){
+				var str = "<option>선택옵션</option>";
+				for(var i in data){
+					str+="<option value="+data[i].price+">"+data[i].a_option+"</option>";
+					};
+					$('#add option').remove();
+					$('#add').append(str);
+			}
+		});
+	});
+
+	$('#card').change(function(){
+		$.ajax({
+			url:'/card',
+			data:{
+				card : $(this).val()
+			},
+			dataType:'json',
+			success:function(data){
+				var str = "<option>할부 개월수를 선택하세요</option>";
+				for(var i in data){
+					str+="<option value="+data[i].interest+'|'+data[i].cardMonth+">"+data[i].cardMonth+"</option>";
+					};
+					$('#month option').remove();
+					$('#month').append(str);
+			}
+		});
+	});
+</script>
+
+</div>
+</div>
+
+
+</div>
+
+</th:block>
+
+</body>
+</html>

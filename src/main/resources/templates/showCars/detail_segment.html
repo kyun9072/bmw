@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layouts/base_layout}">
+ 
+<head>
+<title th:text="#{page_name}"></title> 
+<th:block th:replace="fragments/base_config :: main_config"></th:block>   
+<style type="text/css">
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body id="thisBody">
+
+<th:block layout:fragment="content">
+
+<div class="row-ex" th:each="carList,index:${carList}" style="margin: auto;">
+<div class="col" th:if="${index.index}==0"><img th:src="@{${carList.img}}" style="width: 100%; height: auto;"></div>
+</div>
+
+<div class="container">
+<div class="row">
+<a class="col" th:text="Trim"></a>
+</div>
+
+<div class="row">
+<div class="col" th:each="carList,index:${carList}" style="border:solid 1px gray">
+<a th:text="|Manufactured : ${carList.car_year}|"></a>
+<div class="col">
+<a th:text="|Model : ${carList.car_model}|"></a>
+<div class="col">
+<a th:text="|Price : ${carList.price}|"></a>
+<div class="col">
+<a th:text="|CC : ${carList.detail}|"></a>
+<div class="col">
+<a th:text="|Km/l : ${carList.mileage}|"></a>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</th:block>
+</body>
+</html>

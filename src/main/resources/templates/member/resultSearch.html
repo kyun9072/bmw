@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{page_name}"></title>
+<th:block th:replace="fragments/base_config :: light_config"></th:block>
+</head>
+
+<body>
+
+<div class="container">
+<div class="col" style="padding:50px">
+<a th:text="|Your Id = ${id}|"></a><br><br>
+<button class="btn btn-sm btn-danger" onclick="window.close();">확인</button>
+</div>
+</div>
+
+	
+</body>
+</html>

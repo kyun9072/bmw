@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layouts/base_layout}">
+ 
+<head>
+<title th:text="#{page_name}"></title>
+<th:block th:replace="fragments/base_config :: main_config"></th:block>   
+</head>
+
+<th:block layout:fragment="content">
+
+<div class="row-ex">
+
+<div class="col">
+<form th:action="changekPass" method="POST" >
+
+<label for="username" th:text="#{id}"></label><br>
+<input id="username" type="text" name="username" class="validate" th:value="${session.username}" style="text-align:center" readonly="readonly"/>
+<br>
+
+
+<label for="password" th:text="#{pw}"></label><br>
+<input id="password" type="password" name="password" class="validate" oninput="checkPw();" style="text-align:center" /><br>
+<span id="chkPw" style="color: red;"></span>
+<br>
+
+<br>
+<button type="submit" class="btn btn-danger" th:text="변경하기"></button>
+<br><br>
+
+</form>
+</div>
+
+</div>
+<script th:inline="javascript">
+var regexPw = [[#{regexPw}]];
+</script>
+</th:block>
+</body>
+</html>

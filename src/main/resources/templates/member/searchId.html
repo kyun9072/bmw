@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{page_name}"></title>
+<th:block th:replace="fragments/base_config :: light_config"></th:block>
+</head>
+
+<body>
+<div class="container">
+<div class="col" style="padding:50px">
+<h2 th:text="#{find_id}"></h2>
+<form th:action="resultSearch">
+<label for="name" th:text="#{name}"></label><br>
+<input id="name" name="name" type="text"><br>
+<label for="email" th:text="#{email}"></label><br>
+<input id="email" name="email" type="text"><br>
+<input type="submit" class="btn btn-sm btn-danger" th:value="#{search}">
+</form>
+</div>
+</div>
+
+</body>
+</html>

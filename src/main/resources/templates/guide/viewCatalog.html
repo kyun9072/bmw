@@ -1,0 +1,19 @@
+<html 
+xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title th:text="#{page_name}"></title> 
+<th:block th:replace="fragments/base_config :: main_config"></th:block>  
+</head>
+
+<body>
+
+<div class="container" style="text-align: center">
+<img class="col" th:src="@{${view}}" width="100%">
+
+<button style="margin-top:20px;margin-bottom:30px" type="button" class="btn btn-outline-white" onclick="window.close();" th:text="#{close}"></button>
+</div>
+
+
+</body>
+</html>
